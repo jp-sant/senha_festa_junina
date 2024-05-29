@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela de Chamada de Senha - Festa Junina 2024</title>
+    <script src="lib/jquery-3.3.1.min.js"></script>
+    <script src="lib/scripts.js"></script>
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        background-color: #f8e5c3; /* Cor de fundo inspirada em palha */
+        margin: 0;
+        padding: 0;
+    }
+    .titulo-principal {
+        font-size: 30px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        color: #9b4400; /* Cor inspirada em madeira */
+    }
+    .container {
+        width: 80%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+    .coluna {
+	width: calc(50% - 30px);
+        margin: 0 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f5d5a3; /* Cor de fundo inspirada em palha */
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Sombra leve */
+    }
+    .titulo {
+        font-size: 30px;
+        font-weight: bold;
+        margin-bottom: 30px;
+        color: #9b4400; /* Cor inspirada em madeira */
+    }
+    .senha-container {
+        background-color: #ffcc00; /* Cor amarela inspirada em milho */
+        padding: 15px 100px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Sombra leve */
+    }
+    .senha {
+        font-size: 50px;
+        font-weight: bold;
+        color: #9b4400; /* Cor inspirada em madeira */
+    }
+    .historico-lista {
+        margin-top: 15px;
+    }
+    .historico-item {
+        margin-bottom: 10px;
+        color: #9b4400; /* Cor inspirada em madeira */
+    }
+    .bandeirinhas {
+            width: 750px; /* Defina a largura desejada */
+            height: 100px; /* Mantém a proporção da imagem */
+        }
+    .bandeirinhas {
+	position: relative;
+    	top: -20px; /* Ajuste conforme necessário */
+    	left: 300px; /* Ajuste conforme necessário */
+}
+
+    </style>
+    </head>
+
+<body>
+
+<h1 class="titulo-principal">FESTA JUNINA 2024 - EMEIEF ALDO JOSÉ KUHL</h1>
+
+<img class="bandeirinhas" src="imagen/bandeirinhas.png" alt="Bandeirinhas">
+
+<div class="container">
+    <div class="coluna">
+        <h2 class="titulo">PASTEL</h2>
+        <div class="senha-container">
+            <h3>SENHA:</h3>
+            <div class="senha" id="senhaDisplay">0</div>
+        </div>
+        <div class="historico">
+            <h4>Ultimas Chamadas:</h4>
+            <div id="historicoSenhas" class="historico-lista"></div>
+        </div>
+    </div>
+    <div class="coluna">
+        <h2 class="titulo">CACHORRO QUENTE</h2>
+        <div class="senha-container">
+            <h3>SENHA:</h3>
+            <div class="senha" id="chamadaSecundaria">0</div>
+        </div>
+        <div class="historico">
+            <h4>Ultimas Chamadas:</h4>
+            <div id="historicoChamadaSecundaria" class="historico-lista"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+var senhaAtual = 0;
+var senhaDisplay = document.getElementById("senhaDisplay");
+var historicoSenhas = document.getElementById("historicoSenhas");
+var historico = [];
+var chamadaSecundaria = document.getElementById("chamadaSecundaria");
+var senhaAtualSecundaria = 0;
+var historicoChamadaSecundaria = document.getElementById("historicoChamadaSecundaria");
+var historicoSecundario = [];
+
+// Adiciona event listener para as teclas de seta
+document.addEventListener("keydown", function(event) {
+    if (event.key === "ArrowUp") {
+        incrementarSenha();
+    } else if (event.key === "ArrowDown") {
+        decrementarSenha();
+    } else if (event.key === "ArrowRight") {
+        incrementarSenhaSecundaria();
+    } else if (event.key === "ArrowLeft") {
+        decrementarSenhaSecundaria();
+    }
+});
+
+function incrementarSenha() {
+    if (senhaAtual < 1000) {
+        senhaAtual++;
+        senhaDisplay.innerText = "" + senhaAtual;
+        atualizarHistorico(senhaAtual, historicoSenhas);
+        reproduzirAudio();
+    } else {
+        alert("Todas as senhas já foram chamadas.");
+    }
+}
+
+function decrementarSenha() {
+    if (senhaAtual > 0) {
+        senhaAtual--;
+        senhaDisplay.innerText = "" + senhaAtual;
+        atualizarHistorico(senhaAtual, historicoSenhas);
+        reproduzirAudio();
+    } else {
+        alert("A senha não pode ser menor que 0.");
+    }
+}
+
+function incrementarSenhaSecundaria() {
+    senhaAtualSecundaria++;
+    chamadaSecundaria.innerText = "  " + senhaAtualSecundaria;
+    atualizarHistorico(senhaAtualSecundaria, historicoChamadaSecundaria);
+    reproduzirAudio();
+}
+
+function decrementarSenhaSecundaria() {
+    if (senhaAtualSecundaria > 0) {
+        senhaAtualSecundaria--;
+        chamadaSecundaria.innerText = "  " + senhaAtualSecundaria;
+        atualizarHistorico(senhaAtualSecundaria, historicoChamadaSecundaria);
+        reproduzirAudio();
+    } else {
+        alert("A senha não pode ser menor que 0.");
+    }
+}
+
+function reproduzirAudio() {
+    var audioElement = document.getElementById('audioChamada');
+    audioElement.play();
+}
+
+function atualizarHistorico(senha, historicoContainer) {
+    var historicoArray;
+    if (historicoContainer === historicoSenhas) {
+        historicoArray = historico;
+    } else if (historicoContainer === historicoChamadaSecundaria) {
+        historicoArray = historicoSecundario;
+    }
+
+    if (historicoArray.length >= 5) {
+        historicoArray.shift(); // Remove o item mais antigo do histórico
+    }
+    historicoArray.push(senha); // Adiciona a senha atual ao histórico
+
+    // Atualiza a exibição do histórico
+    historicoContainer.innerHTML = "";
+    for (var i = historicoArray.length - 1; i >= 0; i--) {
+        var historicoItem = document.createElement("div");
+        historicoItem.classList.add("historico-item");
+        historicoItem.innerText = "Senha chamada: " + historicoArray[i];
+        historicoContainer.appendChild(historicoItem);
+    }
+}
+</script>
+    <audio id="audioChamada" src="audio/chamada.wav"></audio>
+</body>
+</html>
